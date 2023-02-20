@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "category.apps.CategoryConfig",
+    "account.apps.AccountConfig"
 ]
 
 MIDDLEWARE = [
@@ -69,7 +70,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "ecommerce.wsgi.application"
-
+AUTH_USER_MODEL = "account.Account"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
