@@ -3,4 +3,9 @@ from .models import Category
 # Register your models here.
 
 # Category Admin
-admin.site.register(Category)
+class CategorAdmin(admin.ModelAdmin):
+    prepopulated_fields={'categorySlug':('categoryName',)} # categorySlug will be populated by categoryName
+    list_display=('categoryName','categorySlug') # Displaying the fields in the admin
+    
+    
+admin.site.register(Category,CategorAdmin)
