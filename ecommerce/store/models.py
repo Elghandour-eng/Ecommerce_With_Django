@@ -1,5 +1,6 @@
 from django.db import models
 from category.models import Category
+from django.urls import reverse # Used to generate URLs by reversing the URL patterns
 
 # Create your models here.
 
@@ -16,7 +17,8 @@ class Product(models.Model):
     modified_date = models.DateTimeField(auto_now = True)  # auto_now=True means that the date will be updated automatically
     #created_by = models.ForeignKey('account.Account',on_delete=models.CASCADE,related_name='product_created_by',null=True,blank=True,) 
     
-    
+    def get_url(self):
+        return reverse("product_details", args = [self.product_category.categorySlug,self.product_slug])
     
     def __str__(self) -> str :
         return self.product_name
