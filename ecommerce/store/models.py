@@ -5,6 +5,7 @@ from django.urls import reverse # Used to generate URLs by reversing the URL pat
 # Create your models here.
 
 class Product(models.Model):
+    #product_id = models.AutoField(primary_key=True)
     product_name = models.CharField(max_length =100,unique=True)
     product_slug = models.SlugField(max_length =100)
     product_description = models.TextField(max_length =400,blank=True) # blank=True means that the field is not required
