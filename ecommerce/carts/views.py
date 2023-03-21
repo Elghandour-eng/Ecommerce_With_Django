@@ -16,7 +16,7 @@ def _cart_id(request):
     return cart    
 
 
-def add_to_cart(request, product_id):
+def add_cart(request, product_id):
     product = Product.objects.get(id=product_id)
     
     try:
@@ -25,12 +25,12 @@ def add_to_cart(request, product_id):
         cart = Cart.objects.create(
             cart_id = _cart_id(request)
         )
-        cart.save()
+    cart.save()
     
     
     try:
         cart_item = CartItem.objects.get(product=product, cart=cart)
-        if cart_item.quantity < cart_item.product.stock:
+        if cart_item.quantity < cart_item.product.product_stock:
             cart_item.quantity += 1
         cart_item.save()
     except CartItem.DoesNotExist:
@@ -41,7 +41,8 @@ def add_to_cart(request, product_id):
         )
         cart_item.save()
         
-    return redirect('cart')
-
-def cart_home(request):
+    return HttpResponse(cart_item.product)
+    exit()
+    return redirect('carts')
+def cart(request):
     return render(request, "store/carts.html", {})
