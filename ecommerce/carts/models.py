@@ -5,23 +5,22 @@ from account.models import Account
 
 # Create your models here.
 class Cart(models.Model):
-    id = models.AutoField(primary_key=True, blank=False, null=False)
-    user = models.ForeignKey("account.Account", on_delete=models.CASCADE, blank=True, null=True)
+    cart_id = models.CharField(max_length=250, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     
     
     def __str__(self):
-        return str(self.id)
+        return str(self.cart_id)
     
 class CartItem(models.Model):
-    id = models.AutoField(primary_key=True, blank=False, null=False)
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, blank=False, null=False)
-    product = models.ForeignKey("store.Product", on_delete=models.CASCADE, blank=False, null=False)
-    quantity = models.IntegerField(default=1)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE,)
+    product = models.ForeignKey("store.Product", on_delete=models.CASCADE)
+    quantity = models.IntegerField()
     date_created = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
     
     def __str__(self):
-        return str(self.id)
-    
+        return self.product
+     
     def get_total(self):
         return self.product.price * self.quantity
