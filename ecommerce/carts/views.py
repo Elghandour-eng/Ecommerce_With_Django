@@ -1,5 +1,6 @@
 from django.shortcuts import render , redirect
 from django.http import HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
 # get the product model
 from store.models import Product
 
@@ -41,8 +42,21 @@ def add_cart(request, product_id):
         )
         cart_item.save()
         
-    return HttpResponse(cart_item.product)
-    exit()
+
     return redirect('carts')
-def cart(request):
-    return render(request, "store/carts.html", {})
+def cart(request, total=0, quantity=0, cart_items=None):
+    try :
+        cart = Cart.objects.get(cart_id=_cart_id(request))
+        cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+        for cart_item in cart_items:
+            total += (cart_item.product.product_price * cart_item.quantity)
+            quantity += cart_item.quantity
+    except ObjectDoesNotExist:
+        pass
+    
+    context = {
+        "total": total,
+        "quantity": quantity,
+        "cart_items": cart_items,
+    }        
+    return render(request, "store/carts.html", context)

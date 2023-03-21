@@ -15,7 +15,7 @@ class Cart(models.Model):
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE,)
     product = models.ForeignKey("store.Product", on_delete=models.CASCADE)
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(default=1)
     date_created = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     
@@ -23,4 +23,4 @@ class CartItem(models.Model):
         return self.product
      
     def get_total(self):
-        return self.product.price * self.quantity
+        return self.product.product_price * self.quantity
