@@ -150,7 +150,7 @@
                         </div> <!-- price-wrap.// -->
                     </div>
                 {% if product.product_stock > 0 %}
-                    <a href="#" class="btn btn-block btn-primary">Added to cart </a>
+                    <a href="{% url "carts" %}" class="btn btn-block btn-primary">Added to cart </a>
                     {% else %}
                         <a href="#" class="btn btn-block btn-primary">Out of Stock </a>
                     {% endif %}
