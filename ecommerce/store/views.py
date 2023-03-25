@@ -5,6 +5,7 @@ from carts.models import CartItem
 from carts.views import _cart_id
 from django.http import HttpResponse
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db.models import Q
 
 
 # Create your views here.
@@ -21,7 +22,7 @@ def store(request , category_slug=None):
         paged_products = paginator.get_page(page) # Get the page number from the url
         product_count = products.count()
     else:
-        products = Product.objects.all().filter(product_isavilabe=True)
+        products = Product.objects.all().filter(product_isavilabe=True).order_by("id")
         paginator = Paginator(products ,6) # Show 25 contacts per page
         page = request.GET.get("page") # Get the page number from the url
         paged_products = paginator.get_page(page) # Get the page number from the url
@@ -52,4 +53,23 @@ def product_details(request,category_slug,product_slug):
         "in_cart": in_cart,
     }
     return render(request, 'store/product_details.html', context)
+
+
+def search(request):
+    if 'keyword' in request.GET:
+        keyword = request.GET['keyword']
+        if keyword:
+            products = Product.objects.order_by('-created_date').filter(Q(product_name__icontains=keyword) | Q(product_description__icontains=keyword)
+                                                                        | Q(product_category__categoryName__icontains=keyword)  )
+                                                                        # icontains is used to search for the keyword in the product name
+                                                                        # Q is used to search for the keyword in the product description
+                                                                        # Q is stand for query for more info visit https://docs.djangoproject.com/en/3.1/topics/db/queries/#complex-lookups-with-q-objects
+            product_count = products.count()
+        context = {
+            "products": products,
+            "product_count": product_count,
+        }   
+    
+    
+    return render(request, 'store/store.html', context)
     
